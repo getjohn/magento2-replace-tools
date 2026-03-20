@@ -285,8 +285,10 @@ class ReplaceBuilder
     public function removeBulk(BulkReplacement $bulkReplacement)
     {
         $bulks = $this->readBulks();
-        $key = array_search($bulkReplacement->getComposerName(), $bulks);
-        if (false !== $key) {
+        $key = array_find_key($bulks, function(BulkReplacement $bulk, $key) use($bulkReplacement) {
+            return $bulk->getComposerName() === $bulkReplacement->getComposerName();
+        });
+        if (null !== $key) {
             unset($bulks[$key]);
         }
 
